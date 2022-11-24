@@ -16,7 +16,7 @@ cd /ubicacion/del/repo/hotel
 npm install
 ```
 
-## 3. Correr la aplicación
+### 3. Correr la aplicación
 
 ```
 npm run dev
