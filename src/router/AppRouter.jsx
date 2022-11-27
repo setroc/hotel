@@ -2,6 +2,9 @@ import { Route, Routes } from "react-router-dom"
 
 import { Login, Register } from "../components/auth"
 
+import { Perfil } from "../components/perfil"
+import { Visualizar } from "../components/reservaciones"
+
 export const AppRouter = () => {
   return (
     <>
@@ -11,6 +14,8 @@ export const AppRouter = () => {
         <Route path="register/*" element={<Register />}/>
         {/* rutas privadas */}
         <Route path="/*" element={<Hola />} />
+        <Route path="perfil/*" element={<Perfil/>} />
+        <Route path="reservaciones/visualizar" element={<Visualizar/>} />
       </Routes>
     </>
   )
