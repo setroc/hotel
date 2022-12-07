@@ -4,20 +4,26 @@ import { Login, Register } from "../components/auth"
 
 import { Perfil } from "../components/perfil"
 import { Visualizar } from "../components/reservaciones"
+import { PrivateRoute } from "./PrivateRoute"
 
 export const AppRouter = () => {
   return (
-    <>
-      <Routes>
-        {/* rutas públicas */}
-        <Route path="login/*" element={<Login />}/>
-        <Route path="register/*" element={<Register />}/>
-        {/* rutas privadas */}
-        <Route path="/*" element={<Hola />} />
-        <Route path="perfil/*" element={<Perfil/>} />
-        <Route path="reservaciones/visualizar" element={<Visualizar/>} />
-      </Routes>
-    </>
+    <Routes>
+      {/* rutas públicas */}
+      <Route path="login/*" element={<Login />}/>
+      <Route path="register/*" element={<Register />}/>
+      {/* rutas privadas */}
+      <Route 
+        path="/*" 
+        element={
+          <PrivateRoute role={'admin'}>
+            <Hola />
+          </PrivateRoute>
+        } 
+      />
+      {/* <Route path="perfil/*" element={<Perfil/>} />
+      <Route path="reservaciones/visualizar" element={<Visualizar/>} /> */}
+    </Routes>
   )
 }
 
