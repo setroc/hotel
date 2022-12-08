@@ -28,20 +28,29 @@ export const AppRouter = () => {
       />
 
       {/* rutas privadas */}
-      <Route 
-        path="/*" 
-        element={
-          <PrivateRoute role={'admin'}>
-            <Hola />
-          </PrivateRoute>
-        } 
-      />
-      {/* <Route path="perfil/*" element={<Perfil/>} />
-      <Route path="reservaciones/visualizar" element={<Visualizar/>} /> */}
+      <Route
+        path="/"
+        element={ <PrivateRoute roles={['admin', 'trabajador', 'cliente']}/> }
+      >
+        <Route path="/" element={<Hola />} />
+        <Route path="admin" element={<PrivateRoute roles={['admin']} />} >
+          <Route path="customer" element={<Register />} />
+        </Route>
+
+        <Route path="404" element={<Error404 />} />
+
+      </Route>
     </Routes>
   )
 }
 
+const Error404 = () => {
+  return(
+    <>
+      <h1>Error 404</h1>
+    </>
+  )
+}
 const Hola = () => {
   return(
     <>

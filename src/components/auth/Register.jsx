@@ -13,7 +13,7 @@ const initialValues = {
   numEmergencia: 5566778899,
   email: 'correo@prueba.com',
   curp: 'NOSE223344DDFFRR11',
-  fechaNacimiento: '26/06/1999',
+  fechaNacimiento: new Date().toJSON().slice(0,10),
   password: '1234',
   password1: '1234',
 }
