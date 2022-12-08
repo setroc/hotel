@@ -5,7 +5,7 @@ import { AppRouter } from "./router/AppRouter"
 import { AuthContext, AuthReducer } from './auth'
 
 const init = () => {
-  return {logged: true, role: 'admin'}
+  return {logged: false, role: null}
 }
 
 function App() {

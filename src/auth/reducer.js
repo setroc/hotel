@@ -1,10 +1,13 @@
-
-export const AuthReducer = (state={}, action) => {
+const initialSate = {
+    logged: false,
+    role: null
+}
+export const AuthReducer = (state=initialSate, action) => {
     switch (action.type) {
         case "login":
             return {
+                logged: true,
                 ...action.payload,
-                logged: true
             }
         case "logout":
             return {
