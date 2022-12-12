@@ -1,6 +1,25 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 
 export const Perfil = () => {
+  const [perfil,setPerfil] = useState(null)
+  const getUser = async () => {
+    fetch('https://pokeapi.co/api/v2/pokemon/ditto',{
+      method:'GET',
+      mode: 'cors',
+      headers: {
+        // 'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json()).then((data) => setPerfil(data))
+    
+  }
+  useEffect(() => {
+    getUser()
+  
+  }, [])
+  console.log(perfil)
+  
+  
   //if(data.user=="Cliente")
   return (
     <form className="vh-100" >
@@ -13,7 +32,7 @@ export const Perfil = () => {
                 <div className="mb-2">
                   <label className="form-label text-start w-100">
                     Nombre(s)
-                    <input placeholder="Juan" type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required/>
+                    <input placeholder="nombre" defaultValue={perfil?.name} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required/>
                   </label>
                   <div className="row">
                     <div className="col-md">

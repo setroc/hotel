@@ -26,6 +26,13 @@ export const AppRouter = () => {
           </PublicRoute>
         }
       />
+      <Route path="perfil/*" 
+        element={
+          <PublicRoute>
+            <Perfil />
+          </PublicRoute>
+        }
+      />
 
       {/* rutas privadas */}
       <Route
