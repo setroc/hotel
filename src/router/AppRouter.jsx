@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom"
 
-import { Login, Register } from "../components/auth"
-
-import { Perfil } from "../components/perfil"
-import { Visualizar } from "../components/reservaciones"
 import { PrivateRoute } from "./PrivateRoute"
 import { PublicRoute } from "./PublicRoute"
+
+import { Todos } from "../components/admin/Todos"
+import { Login, Register } from "../components/auth"
+import { Layout } from "../components/layout"
+import { Perfil } from "../components/perfil"
+import { Visualizar } from "../components/reservaciones"
 
 export const AppRouter = () => {
   return (
@@ -22,7 +24,7 @@ export const AppRouter = () => {
         path="register/*" 
         element={
           <PublicRoute>
-            <Register />
+            <Register styles={{backgroundColor: '#508bfc', height: '100vh'}} />
           </PublicRoute>
         }
       />
@@ -30,14 +32,19 @@ export const AppRouter = () => {
       {/* rutas privadas */}
       <Route
         path="/"
-        element={ <PrivateRoute roles={['admin', 'trabajador', 'cliente']}/> }
+        element={<Layout> <PrivateRoute roles={['administrador', 'trabajador', 'cliente']}/> </Layout>}
       >
         <Route path="/" element={<Hola />} />
-        <Route path="admin" element={<PrivateRoute roles={['admin']} />} >
-          <Route path="customer" element={<Register />} />
+
+        {/* Admin */}
+        <Route path="admin" element={<PrivateRoute roles={['administrador']} />} >
+          <Route path="customer">
+            <Route path="registrar" element={<Register titulo='Crear cuenta de cliente' role='admin' />} />
+            <Route path="todos" element={<Todos />} />
+          </Route>
         </Route>
 
-        <Route path="404" element={<Error404 />} />
+        <Route path="*" element={<Error404 />} />
 
       </Route>
     </Routes>

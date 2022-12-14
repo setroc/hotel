@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
 
-import { AuthContext } from "../../auth";
 
 
 const initialValues = {
@@ -18,30 +17,45 @@ const initialValues = {
   password1: '1234',
 }
 
-export const Register = () => {
-  const {dispatch} = useContext(AuthContext);
+export const Register = ({titulo='Crear cuenta', role=null, url='', styles}) => {
+  // const {dispatch} = useContext(AuthContext);
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues:initialValues});
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     const { password, password1 } = formData;
     if ( password != password1 ) {
       return console.error('Las contraseñas no coinciden');
     }
-    const payload = {
-      role: 'admin'
-    }
-    dispatch({type:'login', payload})
 
-    console.log('registrado')
+    try {
+      // const response = await fetch(`http://localhost:4000${url}`,{
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formData)
+      // })
+      // const body = await response.json();
+  
+      // const payload = {
+      //   role: 'admin'
+      // }
+      
+      // dispatch({type:'login', payload})
+  
+      console.log('registrado')
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="vh-100" style={{backgroundColor: '#508bfc'}}>
-      <div className="container py-5 h-100">
+    <form onSubmit={handleSubmit(onSubmit)} style={styles}>
+      <div className="container py-4">
         <div className="row d-flex justify-content-center align-items-center mh-100 overflow-auto">
           <div className="col-12 col-md-8 col-lg-6 col-xl-5 w-75">
             <div className="card shadow-2-strong" style={{borderRadius: '1rem'}}>
               <div className="card-body p-5 text-center">
-                <h3 className="mb-5">Crear cuenta</h3>
+                <h3 className="mb-5">{titulo}</h3>
                 <div className="mb-2">
                   <label className="form-label text-start w-100">
                     Nombre(s)
@@ -184,7 +198,9 @@ export const Register = () => {
 
                 <div className="d-grid gap-3">
                   <button className="btn btn-primary btn-lg btn-block" type="submit">Crear cuenta</button>
-                  <Link className="align-self-end" to="/login">Iniciar sesión</Link>
+                  {
+                    !role && <Link className="align-self-end" to="/login">Iniciar sesión</Link>
+                  }
                 </div>
               </div>
             </div>

@@ -2,25 +2,27 @@ import { useContext } from "react";
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
 
-import { AuthContext } from "../../auth";
+import { useAuth } from "../../context";
 
 export const Login = () => {
-  const {dispatch} = useContext(AuthContext);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {email: 'admin@admin.com', password: 'sudoDBST2022Ñ'}});
+  const { login } = useAuth();
 
   const onSubmit = async (formData) => {
-    console.log(JSON.stringify(formData))
-    const response  = await fetch('http://localhost:4000/api/v1/auth/login',{
-      method:'POST',
-      mode: 'cors',
-      headers: {
-        // 'Content-Type': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    const body = await response.json();
-    dispatch({type:"login"})
+    // const response  = await fetch('http://localhost:4000/api/v1/auth/login',{
+    //   method:'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(formData)
+    // })
+    // const body = await response.json();
+
+    // if ( response.ok ) {
+    //   dispatch({type:"login", payload: {role:body.user_role}})
+    // }
+    await login(formData,'http://localhost:4000/api/v1/auth/login');
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="vh-100" style={{backgroundColor: '#508bfc'}}>

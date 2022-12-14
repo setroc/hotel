@@ -1,12 +1,12 @@
-import { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
-import { AuthContext } from "../auth";
+import { useAuth } from "../context";
 
 export const PublicRoute = ({children}) => {
   const location = useLocation();
-  const {user} = useContext(AuthContext);
-  if ( user.logged ) {
+  const {user} = useAuth();
+  const {user_role} = user;
+  if ( user_role ) {
     return <Navigate to="/" state={{ from: location }} />;
   }
   return children;
