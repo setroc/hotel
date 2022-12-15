@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { PrivateRoute } from "./PrivateRoute"
 import { PublicRoute } from "./PublicRoute"
 
-import { Customers } from "../components/admin"
+import { Customers, CustomerForm } from "../components/admin"
 import { Login, Register } from "../components/auth"
 import { Layout } from "../components/layout"
 import { Perfil } from "../components/perfil"
@@ -43,9 +43,9 @@ export const AppRouter = () => {
         {/* Admin */}
         <Route path="admin" element={<PrivateRoute roles={['administrador']} />} >
           <Route path="customer">
-            <Route path="registrar" element={<Register titulo='Crear cuenta de cliente' role='admin' />} />
+            <Route path="registrar" element={<CustomerForm modo={true} url={''}  />} />
             <Route path="todos" element={<Customers />} />
-            <Route path=":id" element={<Customers />} />
+            <Route path=":id" element={<CustomerForm modo={false} url={''} />} />
           </Route>
         </Route>
 

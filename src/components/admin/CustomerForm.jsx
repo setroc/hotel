@@ -1,44 +1,70 @@
-import { Link } from "react-router-dom"
+import { useEffect } from "react";
+
+import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context";
 
-const initialValues = {
-  nombre: "Ivan",
-  apPaterno: "Martinez",
-  apMaterno: "Ramirez",
-  genero: "M",
-  fechaNacimiento: new Date().toJSON().slice(0,10),
-  telefono: "551578751",
-  telefonoContactoEmergencia:"144845135",
-  nombreContactoEmergencia:"Edgar",
-  apPaternoContactoEmergencia: "Ramirez",
-  apMaternoContactoEmergencia:"Fuentes",
-  curp: "IIIIIII",
-  rfc: "IIIIIII",
-  calle: "Durazno",
-  numeroExterior: "12",
-  numeroInterior: "3",
-  colonia: "la cruz",
-  estado: "CDMX",
-  alcaldia: "magdalena",
-  codigoPostal:"10800",
-  contrasenia: "12345",
-  contrasenia1: "12345",
-  correo: "ivan@mail.com",
-  idRol: 3,
-}
 
-export const CustomerForm = ({titulo, boton, url}) => {
-  const { register, handleSubmit, formState: { errors } } = useForm({defaultValues:initialValues});
-  const { signin } = useAuth();
+// const initialValues = {
+//   nombre: "Ivan",
+//   apPaterno: "Martinez",
+//   apMaterno: "Ramirez",
+//   genero: "M",
+//   fechaNacimiento: new Date().toJSON().slice(0,10),
+//   telefono: "551578751",
+//   telefonoContactoEmergencia:"144845135",
+//   nombreContactoEmergencia:"Edgar",
+//   apPaternoContactoEmergencia: "Ramirez",
+//   apMaternoContactoEmergencia:"Fuentes",
+//   curp: "IIIIIII",
+//   rfc: "IIIIIII",
+//   calle: "Durazno",
+//   numeroExterior: "12",
+//   numeroInterior: "3",
+//   colonia: "la cruz",
+//   estado: "CDMX",
+//   alcaldia: "magdalena",
+//   codigoPostal:"10800",
+//   contrasenia: "12345",
+//   contrasenia1: "12345",
+//   correo: "ivan@mail.com",
+//   idRol: 3,
+// }
+/*
+  modo:
+  True - Registrar
+  False - Actualizar
+*/
+export const CustomerForm = ({modo=true,url}) => {
+  const { register, handleSubmit, formState: { errors } } = useForm({defaultValues:{}});
 
   const onSubmit = async (formData) => {
-    const { password, password1 } = formData;
-    if ( password != password1 ) {
-      return console.error('Las contraseñas no coinciden');
+    
+    if ( modo ) { // Registro
+      const { password, password1 } = formData;
+      if ( password != password1 ) {
+        return console.error('Las contraseñas no coinciden');
+      }
+    } else { // Actualizar
+
     }
-    await signin(formData, url)
   }
+
+  const getCustomer = async (id) => {
+    const resp = await fetch(`http://localhost:4000/api/v1/admin/customer/${id}`,{
+      credentials: 'include'
+    });
+    const body = await resp.json();
+    console.log(body);
+  }
+  const {id} = useParams();
+  useEffect(()=>{
+    if (!id) { // No viene id entonces es registro
+      return
+    }
+    getCustomer(id)
+
+  },[])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="container py-4">
@@ -46,7 +72,7 @@ export const CustomerForm = ({titulo, boton, url}) => {
           <div className="col-12 col-md-8 col-lg-6 col-xl-5 w-75">
             <div className="card shadow-2-strong" style={{borderRadius: '1rem'}}>
               <div className="card-body p-5 text-center">
-                <h3 className="mb-5">{titulo}</h3>
+                <h3 className="mb-5">{modo?'Registrar cliente':'Actualizar cliente'}</h3>
                 <div className="mb-2">
                   <label className="form-label text-start w-100">
                     Nombre(s)
@@ -56,7 +82,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                       className="form-control" 
                       aria-label="Sizing example input" 
                       aria-describedby="inputGroup-sizing-default" 
-                      required
                       { ...register("nombre",{required:true})}
                     />
                   </label>
@@ -70,7 +95,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("apPaterno",{required:true})}
                         />
                       </label>
@@ -84,7 +108,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("apMaterno",{required:true})}
                         />
                       </label>
@@ -124,7 +147,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default"
-                          required
                           { ...register("fechaNacimiento",{required:true})}
                         />
                       </label>
@@ -145,7 +167,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("telefono",{required:true})}
                         />
                       </label>
@@ -159,7 +180,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("telefonoContactoEmergencia",{required:true})}
                         />
                       </label>
@@ -174,7 +194,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                       className="form-control" 
                       aria-label="Sizing example input" 
                       aria-describedby="inputGroup-sizing-default" 
-                      required
                       { ...register("nombreContactoEmergencia",{required:true})}
                     />
                   </label>
@@ -188,7 +207,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("apPaternoContactoEmergencia",{required:true})}
                         />
                       </label>
@@ -202,7 +220,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("apMaternoContactoEmergencia",{required:true})}
                         />
                       </label>
@@ -222,7 +239,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("curp",{required:true})}
                         />
                       </label>
@@ -236,7 +252,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("rfc",{required:true})}
                         />
                       </label>
@@ -251,7 +266,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                       className="form-control" 
                       aria-label="Sizing example input" 
                       aria-describedby="inputGroup-sizing-default" 
-                      required
                       { ...register("calle",{required:true})}
                     />
                   </label>
@@ -265,7 +279,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("numeroExterior",{required:true})}
                         />
                       </label>
@@ -279,7 +292,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("numeroInterior",{required:true})}
                         />
                       </label>
@@ -295,7 +307,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("colonia",{required:true})}
                         />
                       </label>
@@ -309,7 +320,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("estado",{required:true})}
                         />
                       </label>
@@ -325,7 +335,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("alcaldia",{required:true})}
                         />
                       </label>
@@ -339,7 +348,6 @@ export const CustomerForm = ({titulo, boton, url}) => {
                           className="form-control" 
                           aria-label="Sizing example input" 
                           aria-describedby="inputGroup-sizing-default" 
-                          required
                           { ...register("codigoPostal",{required:true})}
                         />
                       </label>
@@ -358,39 +366,43 @@ export const CustomerForm = ({titulo, boton, url}) => {
                       className="form-control" 
                       aria-label="Sizing example input" 
                       aria-describedby="inputGroup-sizing-default" 
-                      required
                       { ...register("correo",{required:true})}
                     />
                   </label>
+
+                  {
+                    modo && (
+                      <>
+                        <label className="form-label text-start w-100">
+                          Contraseña
+                          <input 
+                            placeholder="" 
+                            type="password" 
+                            className="form-control" 
+                            aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-default" 
+                            { ...register("contrasenia",{required:true})}
+                          />
+                        </label>
+                        <label className="form-label text-start w-100">
+                          Repetir contraseña
+                          <input 
+                            placeholder="" 
+                            type="password" 
+                            className="form-control" 
+                            aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-default" 
+                            { ...register("contrasenia1",{required:true})}
+                          />
+                        </label>
+                      </>
+                    )
+                  }
                 
-                  <label className="form-label text-start w-100">
-                    Contraseña
-                    <input 
-                      placeholder="" 
-                      type="password" 
-                      className="form-control" 
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-default" 
-                      required
-                      { ...register("contrasenia",{required:true})}
-                    />
-                  </label>
-                  <label className="form-label text-start w-100">
-                    Repetir contraseña
-                    <input 
-                      placeholder="" 
-                      type="password" 
-                      className="form-control" 
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-default" 
-                      required
-                      { ...register("contrasenia1",{required:true})}
-                    />
-                  </label>
                 </div>
 
                 <div className="d-grid gap-3">
-                  <button className="btn btn-primary btn-lg btn-block" type="submit">{boton}</button>
+                  <button className="btn btn-primary btn-lg btn-block" type="submit">{modo ? 'Registrar':'Actualizar'}</button>
                 </div>
               </div>
             </div>
