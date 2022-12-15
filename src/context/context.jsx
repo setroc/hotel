@@ -10,9 +10,8 @@ export const useAuth = () => {
 }
 
 const intialState = {
-  isLoading: true,
-  isLoggedIn: false,
-  user: null,
+  user_role: null,
+  user_id: null,
 }
 
 export const AuthProvider = ({children}) => {
@@ -20,7 +19,7 @@ export const AuthProvider = ({children}) => {
     if (localStorage.getItem('user')) {
       return JSON.parse(localStorage.getItem('user'));
     }
-    return null;
+    return intialState;
   })
 
   const navigate = useNavigate();
@@ -31,6 +30,8 @@ export const AuthProvider = ({children}) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      
+      credentials: 'include',
       body: JSON.stringify(formData)
     })
     const {msg, ...rest} = await response.json();
@@ -41,11 +42,26 @@ export const AuthProvider = ({children}) => {
     }
   }
 
+  const signin = async (formData, url) => {
+    const response = await fetch(url,{
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    console.log(await response.json())
+    if (response.ok) {
+      navigate('/login');
+    }
+  }
+
   return (
     <authContext.Provider
       value={{
         user,
         login,
+        signin,
       }}
     >
       {children}

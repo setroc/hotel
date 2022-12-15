@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { PrivateRoute } from "./PrivateRoute"
 import { PublicRoute } from "./PublicRoute"
 
-import { Todos } from "../components/admin/Todos"
+import { Customers } from "../components/admin"
 import { Login, Register } from "../components/auth"
 import { Layout } from "../components/layout"
 import { Perfil } from "../components/perfil"
@@ -24,7 +24,11 @@ export const AppRouter = () => {
         path="register/*" 
         element={
           <PublicRoute>
-            <Register styles={{backgroundColor: '#508bfc', height: '100vh'}} />
+            <Register 
+              styles={{backgroundColor: '#508bfc'}} 
+              role={3}
+              url={'http://localhost:4000/api/v1/admin/customer'}
+            />
           </PublicRoute>
         }
       />
@@ -40,7 +44,8 @@ export const AppRouter = () => {
         <Route path="admin" element={<PrivateRoute roles={['administrador']} />} >
           <Route path="customer">
             <Route path="registrar" element={<Register titulo='Crear cuenta de cliente' role='admin' />} />
-            <Route path="todos" element={<Todos />} />
+            <Route path="todos" element={<Customers />} />
+            <Route path=":id" element={<Customers />} />
           </Route>
         </Route>
 

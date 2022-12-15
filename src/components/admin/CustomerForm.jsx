@@ -28,7 +28,7 @@ const initialValues = {
   idRol: 3,
 }
 
-export const Register = ({titulo='Crear cuenta', role=3, url='', styles}) => {
+export const CustomerForm = ({titulo, boton, url}) => {
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues:initialValues});
   const { signin } = useAuth();
 
@@ -40,7 +40,7 @@ export const Register = ({titulo='Crear cuenta', role=3, url='', styles}) => {
     await signin(formData, url)
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={styles}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="container py-4">
         <div className="row d-flex justify-content-center align-items-center mh-100 overflow-auto">
           <div className="col-12 col-md-8 col-lg-6 col-xl-5 w-75">
@@ -390,10 +390,7 @@ export const Register = ({titulo='Crear cuenta', role=3, url='', styles}) => {
                 </div>
 
                 <div className="d-grid gap-3">
-                  <button className="btn btn-primary btn-lg btn-block" type="submit">Crear cuenta</button>
-                  {
-                    role == 3 && <Link className="align-self-end" to="/login">Iniciar sesión</Link>
-                  }
+                  <button className="btn btn-primary btn-lg btn-block" type="submit">{boton}</button>
                 </div>
               </div>
             </div>
