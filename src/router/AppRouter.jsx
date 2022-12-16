@@ -43,7 +43,7 @@ export const AppRouter = () => {
         {/* Admin */}
         <Route path="admin" element={<PrivateRoute roles={['administrador']} />} >
           <Route path="customer">
-            <Route path="registrar" element={<CustomerForm modo={true} url={''}  />} />
+            <Route path="registrar" element={<CustomerForm modo={true} url={'http://localhost:4000/api/v1/admin/customer'}  />} />
             <Route path="todos" element={<Customers />} />
             <Route path=":id" element={<CustomerForm modo={false} url={''} />} />
           </Route>

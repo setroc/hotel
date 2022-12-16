@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+
+import { useCustomer } from "../../hooks";
 
 
 export const Customers = () => {
 
   const [customers, setCustomers] = useState([]);
+
+  const { borrar } = useCustomer();
 
   const getCustomers = async () =>{
     try {
@@ -28,11 +33,7 @@ export const Customers = () => {
 
   const borrarCustomer = async (id) => {
     try {
-      const resp = await fetch(`http://localhost:4000/api/v1/admin/customer/${id}`,{method:'DELETE',credentials:'include'});
-      if (resp.ok) {
-        const body = await resp.json();
-        console.log(body)
-      }
+      console.log('Borrando')
     } catch (error) {
       console.log(error)
     }
