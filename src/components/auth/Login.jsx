@@ -9,7 +9,7 @@ export const Login = () => {
   const { login } = useAuth();
 
   const onSubmit = async (formData) => {
-    await login(formData,'http://localhost:4000/api/v1/auth/login');
+    await login(formData,`${import.meta.env.VITE_URL}/api/v1/auth/login`);
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="vh-100" style={{backgroundColor: '#508bfc'}}>

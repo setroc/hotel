@@ -63,7 +63,7 @@ export const CustomerForm = ({modo,url}) => {
   }
 
   const getCustomer = async (id) => {
-    const resp = await fetch(`http://localhost:4000/api/v1/admin/customer/${id}`,{
+    const resp = await fetch(`${import.meta.env.VITE_URL}/api/v1/admin/customer/${id}`,{
       credentials: 'include'
     });
     const body = await resp.json();

@@ -30,8 +30,7 @@ export const AuthProvider = ({children}) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      
-      credentials: 'include',
+      // credentials: 'include',
       body: JSON.stringify(formData)
     })
     const {msg, ...rest} = await response.json();

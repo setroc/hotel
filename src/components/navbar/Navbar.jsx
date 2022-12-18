@@ -27,9 +27,9 @@ export const Navbar = () => {
                       Trabajadores
                     </Link>
                     <ul className="dropdown-menu">
-                      <li><Link className="dropdown-item" to="/admin/customer/registrar">Registrar</Link></li>
+                      <li><Link className="dropdown-item" to="/admin/employee/registrar">Registrar</Link></li>
                       <li><hr className="dropdown-divider" /></li>
-                      <li><Link className="dropdown-item" to="/admin/customer/todos">Listar todos</Link></li>
+                      <li><Link className="dropdown-item" to="/admin/employee/todos">Listar todos</Link></li>
                     </ul>
                   </li>
                   <li className="nav-item dropdown">
@@ -47,9 +47,9 @@ export const Navbar = () => {
                       Roles
                     </Link>
                     <ul className="dropdown-menu">
-                      <li><Link className="dropdown-item" to="/admin/customer/registrar">Registrar</Link></li>
+                      <li><Link className="dropdown-item" to="/admin/role/registrar">Registrar</Link></li>
                       <li><hr className="dropdown-divider" /></li>
-                      <li><Link className="dropdown-item" to="/admin/customer/todos">Listar todos</Link></li>
+                      <li><Link className="dropdown-item" to="/admin/role/todos">Listar todos</Link></li>
                     </ul>
                   </li>
                 </>

@@ -13,7 +13,7 @@ export const Customers = () => {
 
   const getCustomers = async () =>{
     try {
-      const resp = await fetch('http://localhost:4000/api/v1/admin/customer',{
+      const resp = await fetch(`${import.meta.env.VITE_URL}/api/v1/admin/customer`,{
         credentials: 'include',
       })
       if ( resp.ok ) {
