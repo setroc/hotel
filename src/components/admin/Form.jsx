@@ -1,45 +1,29 @@
 import { useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-import { useCustomer } from "../../hooks/";
+import { useFetch } from "../../hooks/";
 
-
-// const initialValues = {
-//   nombre: "Ivan",
-//   apPaterno: "Martinez",
-//   apMaterno: "Ramirez",
-//   genero: "M",
-//   fechaNacimiento: new Date().toJSON().slice(0,10),
-//   telefono: "551578751",
-//   telefonoContactoEmergencia:"144845135",
-//   nombreContactoEmergencia:"Edgar",
-//   apPaternoContactoEmergencia: "Ramirez",
-//   apMaternoContactoEmergencia:"Fuentes",
-//   curp: "IIIIIII",
-//   rfc: "IIIIIII",
-//   calle: "Durazno",
-//   numeroExterior: "12",
-//   numeroInterior: "3",
-//   colonia: "la cruz",
-//   estado: "CDMX",
-//   alcaldia: "magdalena",
-//   codigoPostal:"10800",
-//   contrasenia: "12345",
-//   contrasenia1: "12345",
-//   correo: "ivan@mail.com",
-//   idRol: 3,
-// }
 /*
   modo:
   True - Registrar
   False - Actualizar
+  tipo:
+  0 - role
+  1 - trabajador
+  2 - cliente
+  3 - typeRoom
 */
-export const CustomerForm = ({modo,url}) => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const { registrar, actualizar } = useCustomer();
+const Usuario = {
+  1: 'trabajador',
+  2: 'cliente',
+}
+export const Form = ({modo,tipo,url}) => {
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({defaultValues:{idRol:tipo === 1 ? 2 : 3}});
+  const { registrar, actualizar } = useFetch();
 
   const onSubmit = async (formData) => {
     const {contrasenia1, ...data} = formData
@@ -48,30 +32,33 @@ export const CustomerForm = ({modo,url}) => {
       if (!val) { //error
         return Swal.fire({
           icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
+          title: `Error al registrar al ${Usuario[tipo]}.`,
+          text: 'Algo fue mal!',
         })
       }
       return Swal.fire({
         icon: 'success',
-        title: 'Usuario registrado',
-        text: 'El usuario se registro correctamente',
+        title: `${Usuario[tipo]} registrado correctamente`,
+        text: `El ${Usuario[tipo]} se registro correctamente`,
       })
     } else { // Actualizar
-      await actualizar(url, data);
+      await actualizar(`${url}/${id}`, data);
     }
   }
 
   const getCustomer = async (id) => {
-    const resp = await fetch(`${import.meta.env.VITE_URL}/api/v1/admin/customer/${id}`,{
+  const resp = await fetch(`${url}/${id}`,{
       credentials: 'include'
     });
     const body = await resp.json();
+    body.fechaNacimiento = new Date(body.fechaNacimiento).toJSON().slice(0,10)
+    body.idRol = tipo === 1 ? 2 : 3
+    delete body.idUsuario
     reset(body)
   }
   const {id} = useParams();
   useEffect(()=>{
-    if (modo) { // No viene id entonces es registro
+    if (modo) {
       return
     }
     getCustomer(id)
@@ -81,7 +68,7 @@ export const CustomerForm = ({modo,url}) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="card-body w-100 p-4 text-center">
-        <h3 className="mb-5">{modo?'Registrar cliente':'Actualizar cliente'}</h3>
+        <h3 className="mb-5">{modo?`Registrar ${Usuario[tipo]}`:`Actualizar ${Usuario[tipo]}`}</h3>
         <div className="mb-2">
           <label className="form-label text-start w-100">
             Nombre(s)
@@ -89,8 +76,6 @@ export const CustomerForm = ({modo,url}) => {
               placeholder="Juan" 
               type="text" 
               className={`form-control ${errors.nombre && 'is-invalid'}`}
-              aria-label="Sizing example input" 
-              aria-describedby="inputGroup-sizing-default" 
               { ...register("nombre",{required:true})}
             />
           </label>
@@ -102,8 +87,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="Perez" 
                   type="text" 
                   className={`form-control ${errors.apPaterno && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("apPaterno",{required:true})}
                 />
               </label>
@@ -115,8 +99,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="Sosa" 
                   type="text" 
                   className={`form-control ${errors.apMaterno && 'is-invalid'}`} 
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("apMaterno",{required:true})}
                 />
               </label>
@@ -130,7 +113,7 @@ export const CustomerForm = ({modo,url}) => {
                   <input 
                     className={`form-check-input ${errors.genero && 'is-invalid'}`}
                     type="radio" 
-                    value="H"
+                    value="h"
                     { ...register("genero",{required:true})}
                   />
                   Hombre
@@ -141,7 +124,7 @@ export const CustomerForm = ({modo,url}) => {
                   <input 
                     className={`form-check-input ${errors.genero && 'is-invalid'}`}
                     type="radio" 
-                    value="M"
+                    value="f"
                     { ...register("genero",{required:true})}
                   />
                   Mujer
@@ -154,7 +137,7 @@ export const CustomerForm = ({modo,url}) => {
                 <input 
                   type="date" 
                   className={`form-control ${errors.fechaNacimiento && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
+  
                   aria-describedby="inputGroup-sizing-default"
                   { ...register("fechaNacimiento",{required:true})}
                 />
@@ -174,8 +157,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="5546783920" 
                   type="number" 
                   className={`form-control ${errors.telefono && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("telefono",{required:true, maxLength:10, minLength:10})}
                 />
               </label>
@@ -187,8 +169,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="5532567290" 
                   type="number" 
                   className={`form-control ${errors.telefonoContactoEmergencia && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("telefonoContactoEmergencia",{required:true, maxLength:10, minLength:10})}
                 />
               </label>
@@ -201,8 +182,6 @@ export const CustomerForm = ({modo,url}) => {
               placeholder="Juan" 
               type="text" 
               className={`form-control ${errors.nombreContactoEmergencia && 'is-invalid'}`}
-              aria-label="Sizing example input" 
-              aria-describedby="inputGroup-sizing-default" 
               { ...register("nombreContactoEmergencia",{required:true})}
             />
           </label>
@@ -214,8 +193,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="Perez" 
                   type="text" 
                   className={`form-control ${errors.apPaternoContactoEmergencia && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("apPaternoContactoEmergencia",{required:true})}
                 />
               </label>
@@ -227,8 +205,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="Sosa" 
                   type="text" 
                   className={`form-control ${errors.apMaternoContactoEmergencia && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("apMaternoContactoEmergencia",{required:true})}
                 />
               </label>
@@ -246,8 +223,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="XXXX999999XXXXXX11" 
                   type="text" 
                   className={`form-control ${errors.curp && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("curp",{required:true})}
                 />
               </label>
@@ -259,8 +235,7 @@ export const CustomerForm = ({modo,url}) => {
                   placeholder="XXXX999999XXXXXX11" 
                   type="text" 
                   className={`form-control ${errors.rfc && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("rfc",{required:true})}
                 />
               </label>
@@ -270,11 +245,9 @@ export const CustomerForm = ({modo,url}) => {
           <label className="form-label text-start w-100">
             Calle
             <input 
-              placeholder="Juan" 
+              placeholder="Duraznito" 
               type="text" 
               className={`form-control ${errors.calle && 'is-invalid'}`}
-              aria-label="Sizing example input" 
-              aria-describedby="inputGroup-sizing-default" 
               { ...register("calle",{required:true})}
             />
           </label>
@@ -283,11 +256,10 @@ export const CustomerForm = ({modo,url}) => {
               <label className="form-label text-start w-100">
                 No. Exterior
                 <input 
-                  placeholder="Juan" 
+                  placeholder="222" 
                   type="text" 
                   className={`form-control ${errors.numeroExterior && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("numeroExterior",{required:true})}
                 />
               </label>
@@ -296,11 +268,10 @@ export const CustomerForm = ({modo,url}) => {
               <label className="form-label text-start w-100">
                 No. Interior
                 <input 
-                  placeholder="Juan" 
+                  placeholder="10" 
                   type="text" 
                   className={`form-control ${errors.numeroInterior && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("numeroInterior",{required:true})}
                 />
               </label>
@@ -311,11 +282,10 @@ export const CustomerForm = ({modo,url}) => {
               <label className="form-label text-start w-100">
                 Colonia
                 <input 
-                  placeholder="Juan" 
+                  placeholder="San Pedro" 
                   type="text" 
                   className={`form-control ${errors.colonia && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("colonia",{required:true})}
                 />
               </label>
@@ -324,11 +294,10 @@ export const CustomerForm = ({modo,url}) => {
               <label className="form-label text-start w-100">
                 Estado
                 <input 
-                  placeholder="Juan" 
+                  placeholder="CDMX" 
                   type="text" 
                   className={`form-control ${errors.estado && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("estado",{required:true})}
                 />
               </label>
@@ -339,11 +308,10 @@ export const CustomerForm = ({modo,url}) => {
               <label className="form-label text-start w-100">
                 Alcaldía
                 <input 
-                  placeholder="Juan" 
+                  placeholder="Benito Juarez" 
                   type="text" 
                   className={`form-control ${errors.alcaldia && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("alcaldia",{required:true})}
                 />
               </label>
@@ -352,17 +320,57 @@ export const CustomerForm = ({modo,url}) => {
               <label className="form-label text-start w-100">
                 Código Postal
                 <input 
-                  placeholder="Juan" 
+                  placeholder="06600" 
                   type="number" 
                   className={`form-control ${errors.codigoPostal && 'is-invalid'}`}
-                  aria-label="Sizing example input" 
-                  aria-describedby="inputGroup-sizing-default" 
+  
                   { ...register("codigoPostal",{required:true})}
                 />
               </label>
             </div>
           </div>
         </div>
+
+        {
+          tipo === 1 && (
+            <>
+              <hr className="hr" />
+              <div className="mb-2">
+                <div className="row">
+                  <div className="col-md">
+                    <label className="form-label text-start w-100">
+                      Sueldo
+                      <input 
+                        placeholder="100000" 
+                        type="number" 
+                        className={`form-control ${errors.salario && 'is-invalid'}`}
+                        min="1"
+                        step="any"
+        
+                        { ...register("salario",{required:true})}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="col-md">
+                    <label className="form-label text-start w-100">
+                      Área
+                      <select 
+                        className="form-select"
+                        {...register("idArea",{required:true})}  
+                      >
+                        <option value="1">Recepción</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) 
+        }
+
 
         <hr className="hr" />
 
@@ -373,47 +381,34 @@ export const CustomerForm = ({modo,url}) => {
               placeholder="micorreo@dominio.com" 
               type="email" 
               className={`form-control ${errors.correo && 'is-invalid'}`}
-              aria-label="Sizing example input" 
-              aria-describedby="inputGroup-sizing-default" 
               { ...register("correo",{required:true})}
             />
           </label>
 
-          {
-            modo && (
-              <>
-                <div className="row">
-                  <div className="col-md">
-                    <label className="form-label text-start w-100">
-                      Contraseña
-                      <input 
-                        placeholder="" 
-                        type="password" 
-                        className={`form-control ${errors.contrasenia && 'is-invalid'}`}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default" 
-                        { ...register("contrasenia",{required:true})}
-                      />
-                    </label>
-                  </div>
-                  <div className="col-md">
-                    <label className="form-label text-start w-100">
-                      Repetir contraseña
-                      <input 
-                        placeholder="" 
-                        type="password" 
-                        className={`form-control ${errors.contrasenia1 && 'is-invalid'}`}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default" 
-                        { ...register("contrasenia1",{required:true})}
-                      />
-                    </label>
-                  </div>
-                </div>
-              </>
-            )
-          }
-        
+          <div className="row">
+            <div className="col-md">
+              <label className="form-label text-start w-100">
+                Contraseña
+                <input 
+                  placeholder="" 
+                  type="password" 
+                  className={`form-control ${errors.contrasenia && 'is-invalid'}`}
+                  { ...register("contrasenia",{required:true})}
+                />
+              </label>
+            </div>
+            <div className="col-md">
+              <label className="form-label text-start w-100">
+                Repetir contraseña
+                <input 
+                  placeholder="" 
+                  type="password" 
+                  className={`form-control ${errors.contrasenia1 && 'is-invalid'}`}
+                  { ...register("contrasenia1",{required:true})}
+                />
+              </label>
+            </div>
+          </div>
         </div>
 
         <div className="d-grid gap-3">

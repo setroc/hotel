@@ -1,5 +1,5 @@
 
-export const useCustomer = () => {
+export const useFetch = () => {
 
   const registrar = async (url, formData) => {
     try {
@@ -7,6 +7,7 @@ export const useCustomer = () => {
         method:'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-TOKEN':document.cookie.split('=')[1]
         },
         credentials: 'include',
         body: JSON.stringify(formData)
@@ -20,12 +21,13 @@ export const useCustomer = () => {
       return false;
     }
   }
-  const actualizar = async (url) => {
+  const actualizar = async (url, formData) => {
     try {
       const resp = await fetch(url, {
         method:'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-TOKEN':document.cookie.split('=')[1]
         },
         credentials: 'include',
         body: JSON.stringify(formData)
@@ -45,6 +47,9 @@ export const useCustomer = () => {
       const resp = await fetch(url,{
         method: 'DELETE',
         credentials: 'include',
+        headers: {
+          'X-CSRF-TOKEN':document.cookie.split('=')[1]
+        }
       });
       if (resp.ok) {
         return true;

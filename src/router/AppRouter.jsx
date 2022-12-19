@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { PrivateRoute } from "./PrivateRoute"
 import { PublicRoute } from "./PublicRoute"
 
-import { Customers, CustomerForm } from "../components/admin"
+import { Customers, Employees, Form } from "../components/admin"
 import { Login, Register } from "../components/auth"
 import { Layout } from "../components/layout"
 
@@ -41,9 +41,20 @@ export const AppRouter = () => {
         {/* Admin */}
         <Route path="admin" element={<PrivateRoute roles={['administrador']} />} >
           <Route path="customer">
-            <Route path="registrar" element={<CustomerForm modo={true} url={`${import.meta.env.VITE_URL}/api/v1/admin/customer`}  />} />
+            <Route path="registrar" element={<Form modo={true} tipo={2} url={`${import.meta.env.VITE_URL}/api/v1/admin/customer`}  />} />
             <Route path="todos" element={<Customers />} />
-            <Route path=":id" element={<CustomerForm modo={false} url={''} />} />
+            <Route path=":id" element={<Form modo={false} url={''} />} />
+          </Route>
+          <Route path="employee">
+            <Route path="registrar" element={<Form modo={true} tipo={1} url={`${import.meta.env.VITE_URL}/api/v1/admin/employee`} />} />
+            <Route path="todos" element={<Employees />} />
+            <Route path=":id" element={<Form modo={false} tipo={1} url={`${import.meta.env.VITE_URL}/api/v1/admin/employee`} />} />
+          </Route>
+          <Route path="role">
+            <Route path="registrar" element={<Hola />} />
+            <Route path="todos" element={<Hola />} />
+            <Route path=":id" element={<Hola />} />
+
           </Route>
         </Route>
 
