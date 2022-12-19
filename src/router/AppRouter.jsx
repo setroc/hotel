@@ -43,7 +43,7 @@ export const AppRouter = () => {
           <Route path="customer">
             <Route path="registrar" element={<Form modo={true} tipo={2} url={`${import.meta.env.VITE_URL}/api/v1/admin/customer`}  />} />
             <Route path="todos" element={<Customers />} />
-            <Route path=":id" element={<Form modo={false} url={''} />} />
+            <Route path=":id" element={<Form modo={false} tipo={2} url={`${import.meta.env.VITE_URL}/api/v1/admin/customer`} />} />
           </Route>
           <Route path="employee">
             <Route path="registrar" element={<Form modo={true} tipo={1} url={`${import.meta.env.VITE_URL}/api/v1/admin/employee`} />} />
