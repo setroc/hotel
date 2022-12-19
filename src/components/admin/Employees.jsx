@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useAdmin } from "../../context";
 
 import { useFetch } from "../../hooks";
 
@@ -10,9 +11,10 @@ const column = [
 ]
 
 export const Employees = () => {
+
+  const { employees, cargarEmployees, eliminarEmployee } = useAdmin();
   const { borrar } = useFetch();
 
-  const [employees, setEmployees] = useState([]);
   const getEmployes = async () =>{
     try {      
       const resp = await fetch(`${import.meta.env.VITE_URL}/api/v1/admin/employee`,{
@@ -20,10 +22,13 @@ export const Employees = () => {
       })
       if ( resp.ok ) {
         const body = await resp.json();
-        setEmployees(Object.entries(body).length === 0 ? [] : body);
-        return body;
+        cargarEmployees(body);
+        return;
       }
-      return null;
+      if ( resp.status === 401 ) { // Token expiro
+        return signout()
+      }
+      return;
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +67,7 @@ export const Employees = () => {
           Swal.fire({
             title: `El trabajador ${nombre} se ha eliminado correctamente`,
           })
+          eliminarEmployee(id);
         }
       })
     } catch (error) {

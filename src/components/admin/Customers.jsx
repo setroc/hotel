@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { useAdmin } from "../../context";
+import { useAdmin, useAuth } from "../../context";
 import { useFetch } from "../../hooks";
 
 
 export const Customers = () => {
 
-
   const { customers, cargarCustomers, eliminarCustomer  } = useAdmin();
-
-  // const [customers, setCustomers] = useState([]);
-
+  const { signout } = useAuth();
   const { borrar } = useFetch();
 
   const getCustomers = async () =>{
@@ -23,10 +20,13 @@ export const Customers = () => {
       if ( resp.ok ) {
         const body = await resp.json();
         cargarCustomers(body);
-        // setCustomers(Object.entries(body).length === 0 ? [] : body);
-        return body;
+        return;
       }
-      return null;
+      if ( resp.status === 401 ) { // Token expiro
+        return signout()
+      }
+
+      return;
     } catch (error) {
       console.log(error);
     }

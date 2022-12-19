@@ -3,7 +3,7 @@ import { useAuth } from "../../context"
 
 
 export const Navbar = () => {
-  const { user } = useAuth();
+  const { user, signout } = useAuth();
   const { user_role } = user;
   return (
     <nav className="navbar navbar-expand-lg bg-light">
@@ -57,7 +57,7 @@ export const Navbar = () => {
             }
 
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/">Cerrar sesión</Link>
+              <button className="btn btn-link nav-link" onClick={signout}>Cerrar sesión</button>
             </li>
           </ul>
         </div>

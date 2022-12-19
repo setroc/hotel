@@ -36,6 +36,7 @@ export const Form = ({modo,tipo,url}) => {
           text: 'Algo fue mal!',
         })
       }
+      reset();
       return Swal.fire({
         icon: 'success',
         title: `${Usuario[tipo]} registrado correctamente`,

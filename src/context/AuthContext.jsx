@@ -49,10 +49,21 @@ export const AuthProvider = ({children}) => {
       },
       body: JSON.stringify(formData)
     })
-    console.log(await response.json())
     if (response.ok) {
       navigate('/login');
     }
+  }
+
+  const signout = async () => {
+    const response = await fetch(`${import.meta.env.VITE_URL}/api/v1/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN':document.cookie.split('=')[1],
+      },
+      credentials: 'include',
+    })
+    localStorage.removeItem('user');
+    setUser(intialState);
   }
 
   return (
@@ -61,6 +72,7 @@ export const AuthProvider = ({children}) => {
         user,
         login,
         signin,
+        signout,
       }}
     >
       {children}

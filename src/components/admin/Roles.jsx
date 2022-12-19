@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import { useAdmin } from "../../context";
+
 export const Roles = () => {
-  const [roles, setRoles] = useState([]);
+
+  const { roles, cargarRoles, eliminarRole } = useAdmin();
 
   const borrarRole = () => {
 
@@ -15,10 +18,13 @@ export const Roles = () => {
       })
       if ( resp.ok ) {
         const body = await resp.json();
-        setRoles(Object.entries(body).length === 0 ? [] : body);
-        return body;
+        cargarRoles(body)
+        return;
       }
-      return null;
+      if ( resp.status === 401 ) { // Token expiro
+        return signout()
+      }
+      return;
     } catch (error) {
       console.log(error);
     }
