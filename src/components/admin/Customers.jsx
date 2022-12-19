@@ -2,12 +2,16 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
+import { useAdmin } from "../../context";
 import { useFetch } from "../../hooks";
 
 
 export const Customers = () => {
 
-  const [customers, setCustomers] = useState([]);
+
+  const { customers, cargarCustomers, eliminarCustomer  } = useAdmin();
+
+  // const [customers, setCustomers] = useState([]);
 
   const { borrar } = useFetch();
 
@@ -18,7 +22,8 @@ export const Customers = () => {
       })
       if ( resp.ok ) {
         const body = await resp.json();
-        setCustomers(Object.entries(body).length === 0 ? [] : body);
+        cargarCustomers(body);
+        // setCustomers(Object.entries(body).length === 0 ? [] : body);
         return body;
       }
       return null;
@@ -60,6 +65,7 @@ export const Customers = () => {
           Swal.fire({
             title: `El cliente ${nombre} se ha eliminado correctamente`,
           })
+          eliminarCustomer(id);
         }
       })
     } catch (error) {
