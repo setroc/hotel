@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { PrivateRoute } from "./PrivateRoute"
 import { PublicRoute } from "./PublicRoute"
 
-import { Customers, Employees, Form } from "../components/admin"
+import { Customers, Employees, Form, Roles} from "../components/admin"
 import { Login, Register } from "../components/auth"
 import { Layout } from "../components/layout"
 
@@ -52,7 +52,7 @@ export const AppRouter = () => {
           </Route>
           <Route path="role">
             <Route path="registrar" element={<Hola />} />
-            <Route path="todos" element={<Hola />} />
+            <Route path="todos" element={<Roles />} />
             <Route path=":id" element={<Hola />} />
 
           </Route>
