@@ -48,7 +48,7 @@ export const Form = ({modo,tipo,url}) => {
   }
 
   const getCustomer = async (id) => {
-  const resp = await fetch(`${url}/${id}`,{
+    const resp = await fetch(`${url}/${id}`,{
       credentials: 'include'
     });
     const body = await resp.json();

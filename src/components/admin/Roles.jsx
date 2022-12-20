@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { useAdmin } from "../../context";
+import { useAdmin, useAuth } from "../../context";
 
 export const Roles = () => {
 
+  const { signout } = useAuth();
   const { roles, cargarRoles, eliminarRole } = useAdmin();
 
   const borrarRole = () => {
@@ -52,7 +53,7 @@ export const Roles = () => {
                 <th scope="row">{i+1}</th>
                 <td style={{textTransform:'capitalize'}}>{role.nombre}</td>
                 <td className="d-flex justify-content-start">
-                  <Link to={`/admin/customer/${role.idRol}`} >[Editar]</Link>
+                  <Link to={`/admin/role/${role.idRol}`} >[Editar]</Link>
                   <button type="button" style={{color:'red'}} className="btn btn-link  py-0 border-0" onClick={()=>borrarRole(role.idRole, role.nombre)}>[Borrar]</button>
                 </td>
               </tr>

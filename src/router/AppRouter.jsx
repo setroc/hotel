@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { PrivateRoute } from "./PrivateRoute"
 import { PublicRoute } from "./PublicRoute"
 
-import { Customers, Employees, Form, Roles} from "../components/admin"
+import { Customers, Employees, Form, FormGenerico, Roles} from "../components/admin"
 import { Login, Register } from "../components/auth"
 import { Layout } from "../components/layout"
 
@@ -51,9 +51,9 @@ export const AppRouter = () => {
             <Route path=":id" element={<Form modo={false} tipo={1} url={`${import.meta.env.VITE_URL}/api/v1/admin/employee`} />} />
           </Route>
           <Route path="role">
-            <Route path="registrar" element={<Hola />} />
+            <Route path="registrar" element={<FormGenerico modo={true} tipo={0} url={`${import.meta.env.VITE_URL}/api/v1/admin/role`} />} />
             <Route path="todos" element={<Roles />} />
-            <Route path=":id" element={<Hola />} />
+            <Route path=":id" element={<FormGenerico modo={false} tipo={0} url={`${import.meta.env.VITE_URL}/api/v1/admin/role`} />} />
 
           </Route>
         </Route>
