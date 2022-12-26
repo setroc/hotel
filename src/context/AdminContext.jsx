@@ -4,6 +4,7 @@ const initialState = {
   customers: [],
   employees: [],
   roles: [],
+  typeRooms: [],
 }
 export const adminContext = createContext(initialState);
 export const useAdmin = () => {
@@ -16,27 +17,43 @@ export const AdminProvider = ({ children }) => {
   const [state, dispatch] = useReducer(adminReducer, initialState);
 
   // Customers
-  const cargarCustomers = (customers) => {
-    dispatch({type:'cargar_customers',payload:customers})
+  const cargarCustomers = (customers=[]) => {
+    if ( customers.length>0 ) {
+      dispatch({type:'cargar_customers',payload:customers});
+    }
   }
   const eliminarCustomer = (id) => {
-    dispatch({type:'eliminar_customer',payload:id})
+    dispatch({type:'eliminar_customer',payload:id});
   }
 
   // Employees
-  const cargarEmployees = (employees) => {
-    dispatch({type:'cargar_employees',payload:employees});
+  const cargarEmployees = (employees=[]) => {
+    if ( employees.length>0 ) {
+      dispatch({type:'cargar_employees',payload:employees});
+    }
   }
   const eliminarEmployee = (id) => {
-    dispatch({type:'eilimnar_employee',payload:id});
+    dispatch({type:'eliminar_employee',payload:id});
   }
   
   // Roles
-  const cargarRoles = (roles) => {
-    dispatch({type:'cargar_roles',payload:roles});
+  const cargarRoles = (roles=[]) => {
+    if ( roles.length>0 ) {
+      dispatch({type:'cargar_roles',payload:roles});
+    }
   }
   const eliminarRole = (id) => {
-    dispatch({type:'eilimnar_role',payload:id});
+    dispatch({type:'eliminar_role',payload:id});
+  }
+  
+  // TypeRooms
+  const cargarTypeRooms = (typeRooms=[]) => {
+    if ( typeRooms.length>0 ) {
+      dispatch({type:'cargar_typeRooms', payload:typeRooms});
+    }
+  } 
+  const eliminarTypeRoom = (id) => {
+    dispatch({type:'eliminar_typeRoom',payload:id});
   }
 
 
@@ -47,12 +64,15 @@ export const AdminProvider = ({ children }) => {
         customers: state.customers,
         employees: state.employees,
         roles: state.roles,
+        typeRooms: state.typeRooms,
         cargarCustomers,
         eliminarCustomer,
         cargarEmployees,
         eliminarEmployee,
         cargarRoles,
         eliminarRole,
+        cargarTypeRooms,
+        eliminarTypeRoom,
 
       }}
     >
@@ -78,7 +98,7 @@ const adminReducer = (state, action) => {
         ...state,
         employees: action.payload
       }
-    case "eilimnar_employee":
+    case "eliminar_employee":
       return {
         ...state,
         employees: state.employees.filter(employee=>employee.idUsuario !== action.payload)
@@ -88,10 +108,20 @@ const adminReducer = (state, action) => {
         ...state,
         roles: action.payload
       }
-    case "eilimnar_role":
+    case "eliminar_role":
       return {
         ...state,
         roles: state.roles.filter(role=>role.idRol !== action.payload)
+      }
+    case "cargar_typeRooms":
+      return {
+        ...state,
+        typeRooms: action.payload
+      }
+    case "eliminar_typeRoom":
+      return  {
+        ...state,
+        typeRooms: state.typeRooms.filter(typeRoom=>typeRoom.idTipoHabitacion !== action.payload)
       }
     default:
       return state

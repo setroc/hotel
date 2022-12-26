@@ -56,9 +56,9 @@ export const AppRouter = () => {
             <Route path=":id" element={<FormGenerico modo={false} tipo={0} url={`${import.meta.env.VITE_URL}/api/v1/admin/role`} />} />
           </Route>
           <Route path="typeroom">
-            <Route path="registrar" element={<FormGenerico modo={true} tipo={0} url={`${import.meta.env.VITE_URL}/api/v1/admin/role`} />} />
+            <Route path="registrar" element={<FormGenerico modo={true} tipo={1} url={`${import.meta.env.VITE_URL}/api/v1/admin/typeroom`} />} />
             <Route path="todos" element={<TypeRooms />} />
-            <Route path=":id" element={<FormGenerico modo={false} tipo={0} url={`${import.meta.env.VITE_URL}/api/v1/admin/role`} />} />
+            <Route path=":id" element={<FormGenerico modo={false} tipo={1} url={`${import.meta.env.VITE_URL}/api/v1/admin/typeroom`} />} />
           </Route>
         </Route>
 

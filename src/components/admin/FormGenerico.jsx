@@ -61,8 +61,10 @@ export const FormGenerico = ({tipo,modo, url}) => {
         credentials: 'include'
       });
       const body = await resp.json();
-      body.role_name = body.nombre;
-      delete body.nombre;
+      if ( tipo === 0 ) {
+        body.role_name = body.nombre;
+        delete body.nombre;
+      }
       reset(body)
 
     } catch (error) {
@@ -75,7 +77,6 @@ export const FormGenerico = ({tipo,modo, url}) => {
       return
     }
     getData(id);
-    
   }, [modo])
   
 
@@ -103,5 +104,73 @@ export const FormGenerico = ({tipo,modo, url}) => {
         </div>
       </form>
     )
+  }
+
+  if ( tipo === 1 ) { // registrar/actualizar typeroom
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="card-body w-75 m-auto p-4 text-center">
+          <h3 className="mb-5">{modo?`Registrar tipo de cuarto`:`Actualizar tipo de cuarto`}</h3>
+          <div className="mb-2">
+            <div className="row">
+              <div className="col-md">
+                <label className="form-label text-start w-100">
+                  Nombre del tipo de cuarto
+                  <input 
+                    placeholder="junior" 
+                    type="text" 
+                    className={`form-control ${errors.nombre && 'is-invalid'}`}
+                    { ...register("nombre",{required:true})}
+                  />
+                </label>
+              </div>
+              <div className="col-md">
+                <label className="form-label text-start w-100">
+                  Número de camas
+                  <input 
+                    placeholder="1" 
+                    type="number" 
+                    min="1"
+                    className={`form-control ${errors.numCamas && 'is-invalid'}`}
+                    { ...register("numCamas",{required:true})}
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md">
+                <label className="form-label text-start w-100">
+                  Número de personas
+                  <input 
+                    placeholder="2" 
+                    type="number" 
+                    min="1"
+                    className={`form-control ${errors.numPersonas && 'is-invalid'}`}
+                    { ...register("numPersonas",{required:true})}
+                  />
+                </label>
+              </div>
+              <div className="col-md">
+                <label className="form-label text-start w-100">
+                  Precio por noche
+                  <input 
+                    placeholder="70000" 
+                    type="number"
+                    min="1"
+                    step="any"
+                    className={`form-control ${errors.precio && 'is-invalid'}`}
+                    { ...register("precio",{required:true})}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className="d-grid gap-3">
+            <button className="btn btn-primary btn-lg btn-block" type="submit">{modo ? 'Registrar':'Actualizar'}</button>
+          </div>
+        </div>
+      </form>
+    )
+
   }
 }
