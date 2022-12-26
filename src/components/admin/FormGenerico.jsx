@@ -171,6 +171,5 @@ export const FormGenerico = ({tipo,modo, url}) => {
         </div>
       </form>
     )
-
   }
 }

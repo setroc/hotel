@@ -5,6 +5,7 @@ const initialState = {
   employees: [],
   roles: [],
   typeRooms: [],
+  rooms: [],
 }
 export const adminContext = createContext(initialState);
 export const useAdmin = () => {
@@ -55,6 +56,16 @@ export const AdminProvider = ({ children }) => {
   const eliminarTypeRoom = (id) => {
     dispatch({type:'eliminar_typeRoom',payload:id});
   }
+  
+  // Rooms 
+  const cargarRooms = (rooms=[]) => {
+    if ( rooms.length>0 ) {
+      dispatch({type:'cargar_rooms', payload:rooms});
+    }
+  } 
+  const eliminarRoom = (id) => {
+    dispatch({type:'eliminar_room',payload:id});
+  }
 
 
 
@@ -65,6 +76,7 @@ export const AdminProvider = ({ children }) => {
         employees: state.employees,
         roles: state.roles,
         typeRooms: state.typeRooms,
+        rooms: state.rooms,
         cargarCustomers,
         eliminarCustomer,
         cargarEmployees,
@@ -73,6 +85,8 @@ export const AdminProvider = ({ children }) => {
         eliminarRole,
         cargarTypeRooms,
         eliminarTypeRoom,
+        cargarRooms,
+        eliminarRoom,
 
       }}
     >
@@ -123,6 +137,17 @@ const adminReducer = (state, action) => {
         ...state,
         typeRooms: state.typeRooms.filter(typeRoom=>typeRoom.idTipoHabitacion !== action.payload)
       }
+    case "cargar_rooms":
+      return {
+        ...state,
+        rooms: action.payload
+      }
+    case "eliminar_room":
+      return  {
+        ...state,
+        rooms: state.rooms.filter(room=>room.idHabitacion !== action.payload)
+      }
+    
     default:
       return state
   }
