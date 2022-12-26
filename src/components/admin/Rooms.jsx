@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -80,6 +80,7 @@ export const Rooms = () => {
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
             <th scope="col">Descripción</th>
+            <th scope="col">Tipo de habitación</th>
             <th scope="col">Operaciones</th>
           </tr>
         </thead>
@@ -90,8 +91,9 @@ export const Rooms = () => {
                 <th scope="row">{i+1}</th>
                 <td style={{textTransform:'capitalize'}}>{room.nombre}</td>
                 <td style={{textTransform:'capitalize'}}>{room.descripcion}</td>
+                <td style={{textTransform:'capitalize'}}>{room.tipoHabitacion}</td>
                 <td className="d-flex justify-content-start">
-                  <Link to={`/admin/typeroom/${typeRoom.idTipoHabitacion}`} >[Editar]</Link>
+                  <Link to={`/admin/room/${room.idHabitacion}`} >[Editar]</Link>
                   <button type="button" style={{color:'red'}} className="btn btn-link  py-0 border-0" onClick={()=>borrarRoom(room.idHabitacion, room.nombre)}>[Borrar]</button>
                 </td>
               </tr>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -18,6 +18,7 @@ export const FormGenerico = ({tipo,modo, url}) => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const {id} = useParams();
   const { registrar, actualizar } = useFetch();
+  const [data, setData] = useState([]);
 
   const onSubmit = async (formData) => {
     try {
@@ -72,9 +73,22 @@ export const FormGenerico = ({tipo,modo, url}) => {
     }
   }
 
+  const getTypesRooms = async () => {
+    try {
+      const resp = await fetch(`${import.meta.env.VITE_URL}/api/v1/admin/typeroom`,{credentials:'include'})
+      const body = await resp.json();
+      setData(body);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (modo) {
       return
+    }
+    if(tipo===2){
+      getTypesRooms();
     }
     getData(id);
   }, [modo])
@@ -164,6 +178,55 @@ export const FormGenerico = ({tipo,modo, url}) => {
                 </label>
               </div>
             </div>
+          </div>
+          <div className="d-grid gap-3">
+            <button className="btn btn-primary btn-lg btn-block" type="submit">{modo ? 'Registrar':'Actualizar'}</button>
+          </div>
+        </div>
+      </form>
+    )
+  }
+
+  if (tipo===2) {
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="card-body w-100 p-4 text-center">
+          <h3 className="mb-5">{modo?`Registrar cuart`:`Actualizar cuarto`}</h3>
+          <div className="mb-2">
+            <label className="form-label text-start w-100">
+              Nombre
+              <input 
+                placeholder="Lujosa" 
+                type="text" 
+                className={`form-control ${errors.nombre && 'is-invalid'}`}
+                { ...register("nombre",{required:true})}
+              />
+            </label>
+            <label className="form-label text-start w-100">
+              Descripción
+              <input 
+                placeholder="Cuarto para 3 personas con vista al mar" 
+                type="text" 
+                className={`form-control ${errors.descripcion && 'is-invalid'}`}
+                { ...register("descripcion",{required:true})}
+              />
+            </label>
+
+
+            <label className="form-label text-start w-100">
+              Tipo de habitación
+              <select 
+                className="form-select"
+                {...register("idTipoHabitacion",{required:true})}  
+              >
+                {
+                  data.map((tipo)=>(
+                    <option key={tipo.idTipoHabitacion} value={tipo.idTipoHabitacion}>{tipo.nombre}</option>
+                  ))
+                }
+
+              </select>
+            </label>
           </div>
           <div className="d-grid gap-3">
             <button className="btn btn-primary btn-lg btn-block" type="submit">{modo ? 'Registrar':'Actualizar'}</button>
