@@ -28,6 +28,17 @@ export const Form = ({modo,tipo,url}) => {
   const onSubmit = async (formData) => {
     const {contrasenia1, ...data} = formData
     if ( modo ) { // Registro
+
+      // const resp = await fetch(url, {
+      //   method:'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'X-CSRF-TOKEN':document.cookie.split('=')[1]
+      //   },
+      //   credentials: 'include',
+      //   body: JSON.stringify(formData)
+      // })
+      // console.log(resp);
       const val = await registrar(url, data);
       if (!val) { //error
         return Swal.fire({
@@ -44,6 +55,12 @@ export const Form = ({modo,tipo,url}) => {
       })
     } else { // Actualizar
       await actualizar(`${url}/${id}`, data);
+      return Swal.fire({
+        icon: 'success',
+        title: `${Usuario[tipo]} actualizado correctamente`,
+        text: `El ${Usuario[tipo]} se actualizo correctamente`,
+      })
+
     }
   }
 

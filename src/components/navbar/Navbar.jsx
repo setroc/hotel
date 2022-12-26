@@ -52,6 +52,18 @@ export const Navbar = () => {
                       <li><Link className="dropdown-item" to="/admin/role/todos">Listar todos</Link></li>
                     </ul>
                   </li>
+                  <li className="nav-item dropdown">
+                    <Link className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Cuartos
+                    </Link>
+                    <ul className="dropdown-menu">
+                      <li><Link className="dropdown-item" to="/admin/typeroom/registrar">Registrar tipos</Link></li>
+                      <li><Link className="dropdown-item" to="/admin/typeroom/todos">Listar tipos</Link></li>
+                      <li><hr className="dropdown-divider" /></li>
+                      <li><Link className="dropdown-item" to="/admin/room/registrar">Registrar cuartos</Link></li>
+                      <li><Link className="dropdown-item" to="/admin/room/todos">Listar cuartos</Link></li>
+                    </ul>
+                  </li>
                 </>
               )
             }
