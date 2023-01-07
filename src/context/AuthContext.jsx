@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export const authContext =  createContext();
 
@@ -39,7 +40,13 @@ export const AuthProvider = ({children}) => {
       localStorage.setItem('user',JSON.stringify(rest));
       setUser(rest);
       navigate('/');
+      return;
     }
+    Swal.fire({
+      icon: 'error',
+      title: 'Correo o contraseña incorrectas'
+    })
+    return;
   }
 
   const signin = async (formData, url) => {
