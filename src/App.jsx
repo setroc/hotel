@@ -2,7 +2,7 @@
 
 import { AppRouter } from "./router/AppRouter"
 
-import { AdminProvider, AuthProvider } from './context'
+import { AdminProvider, AuthProvider, ReservacionesProvider } from './context'
 
 const init = () => {
   return {logged: false, role: null}
@@ -13,7 +13,9 @@ function App() {
   return (
     <AuthProvider>
       <AdminProvider>
-        <AppRouter />
+        <ReservacionesProvider>
+          <AppRouter />
+        </ReservacionesProvider>
       </AdminProvider>
     </AuthProvider>
   )

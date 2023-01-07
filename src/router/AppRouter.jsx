@@ -6,6 +6,8 @@ import { PublicRoute } from "./PublicRoute"
 import { Customers, Employees, Form, FormGenerico, Roles, TypeRooms, Rooms } from "../components/admin"
 import { Login, Register } from "../components/auth"
 import { Layout } from "../components/layout"
+import { Reservaciones, Registrar } from "../components/reservaciones/"
+import { useAuth } from "../context"
 
 export const AppRouter = () => {
   return (
@@ -67,6 +69,12 @@ export const AppRouter = () => {
           </Route>
         </Route>
 
+        {/* Reservaciones */}
+        <Route path="reservation" element={<PrivateRoute roles={['trabajador']} />} >
+          <Route path="todos" element={<Reservaciones />} />
+          <Route path="registrar" element={<Registrar />} />
+        </Route>
+
         <Route path="*" element={<Error404 />} />
 
       </Route>
@@ -82,9 +90,17 @@ const Error404 = () => {
   )
 }
 const Hola = () => {
+  const {user} = useAuth();
   return(
     <>
-      <h1>Hola</h1>
+      <h2 style={{textTransform:'capitalize'}}>Bienvenido, {user.user_name}</h2>
+    </>
+  )
+}
+const RTodos = () => {
+  return(
+    <>
+      <h1>Reservacion todos</h1>
     </>
   )
 }

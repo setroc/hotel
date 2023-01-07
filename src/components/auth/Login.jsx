@@ -5,7 +5,7 @@ import { useAuth } from "../../context";
 
 export const Login = () => {
 
-  const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {email: 'admin@admin.com', password: 'sudoDBST2022Ñ'}});
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { login } = useAuth();
 
   const onSubmit = async (formData) => {

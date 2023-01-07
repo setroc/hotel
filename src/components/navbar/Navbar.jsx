@@ -20,7 +20,8 @@ export const Navbar = () => {
             
             {
               //Navegación de admin
-              user_role === 'administrador' && (
+              user_role === 'administrador'
+              ? (
                 <>
                   <li className="nav-item dropdown">
                     <Link className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,6 +65,23 @@ export const Navbar = () => {
                       <li><Link className="dropdown-item" to="/admin/room/todos">Listar cuartos</Link></li>
                     </ul>
                   </li>
+                </>
+              ) : user_role === 'trabajador' ? (
+                <>
+                  <li className="nav-item dropdown">
+                    <Link className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Reservaciones
+                    </Link>
+                    <ul className="dropdown-menu">
+                      <li><Link className="dropdown-item" to="/reservation/registrar">Registrar reservación</Link></li>
+                      <li><hr className="dropdown-divider" /></li>
+                      <li><Link className="dropdown-item" to="/reservation/todos">Listar todas las reservaciones</Link></li>
+                    </ul>
+                  </li>
+                </>
+              ) : (
+                <>
+
                 </>
               )
             }

@@ -12,6 +12,7 @@ export const useAuth = () => {
 const intialState = {
   user_role: null,
   user_id: null,
+  user_name: null
 }
 
 export const AuthProvider = ({children}) => {
@@ -55,7 +56,7 @@ export const AuthProvider = ({children}) => {
   }
 
   const signout = async () => {
-    const response = await fetch(`${import.meta.env.VITE_URL}/api/v1/auth/logout`, {
+    await fetch(`${import.meta.env.VITE_URL}/api/v1/auth/logout`, {
       method: 'POST',
       headers: {
         'X-CSRF-TOKEN':document.cookie.split('=')[1],
