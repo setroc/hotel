@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import Swal from "sweetalert2";
-import { useReservaciones } from "../../context";
+import { useAuth, useReservaciones } from "../../context";
 
 const date = {
   begin_date: new Date().toLocaleString('lt',{timezone:'America/Mexico_City'}).split(' ')[0],
@@ -11,6 +11,7 @@ const currentDate = new Date().toLocaleString('lt',{timezone:'America/Mexico_Cit
 export const Registrar = () => {
   const { register, handleSubmit, formState: { errors }, reset, getValues } = useForm({defaultValues:date});
   const { cargarAvailableRooms, reservarRoom, availableRooms:rooms  } = useReservaciones();
+  const { user_id, user_role } = useAuth();
 
   const onBuscarReservaciones = async (formData) => {
     const {begin_date, end_date} = formData;
@@ -35,6 +36,10 @@ export const Registrar = () => {
 
   const onHandleReservacion = async (room_id) => {
     const { begin_date, end_date } = getValues();
+    if ( user_role === 'cliente' ) {
+      reservarRoom(begin_date, end_date, room_id, user_id);
+      return;
+    }
     reservarRoom(begin_date, end_date, room_id, 1);
   }
 

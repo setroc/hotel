@@ -70,9 +70,11 @@ export const AppRouter = () => {
         </Route>
 
         {/* Reservaciones */}
+        <Route path="reservation" element={<PrivateRoute roles={['trabajador','cliente']} />} >
+          <Route path="registrar" element={<Registrar />} />
+        </Route>
         <Route path="reservation" element={<PrivateRoute roles={['trabajador']} />} >
           <Route path="todos" element={<Reservaciones />} />
-          <Route path="registrar" element={<Registrar />} />
         </Route>
 
         <Route path="*" element={<Error404 />} />

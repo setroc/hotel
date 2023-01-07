@@ -81,7 +81,16 @@ export const Navbar = () => {
                 </>
               ) : (
                 <>
-
+                  <li className="nav-item dropdown">
+                    <Link className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Reservaciones
+                    </Link>
+                    <ul className="dropdown-menu">
+                      <li><Link className="dropdown-item" to="/reservation/registrar">Registrar reservación</Link></li>
+                      <li><hr className="dropdown-divider" /></li>
+                      {/* <li><Link className="dropdown-item" to="/reservation/todos">Listar todas las reservaciones</Link></li> */}
+                    </ul>
+                  </li>
                 </>
               )
             }
