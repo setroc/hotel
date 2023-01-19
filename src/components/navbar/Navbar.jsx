@@ -88,7 +88,7 @@ export const Navbar = () => {
                     <ul className="dropdown-menu">
                       <li><Link className="dropdown-item" to="/reservation/registrar">Registrar reservación</Link></li>
                       <li><hr className="dropdown-divider" /></li>
-                      {/* <li><Link className="dropdown-item" to="/reservation/todos">Listar todas las reservaciones</Link></li> */}
+                      <li><Link className="dropdown-item" to="/reservation/todos">Listar reservaciones</Link></li>
                     </ul>
                   </li>
                 </>

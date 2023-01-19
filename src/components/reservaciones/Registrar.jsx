@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form"
 import Swal from "sweetalert2";
 import { useAuth, useReservaciones } from "../../context";
@@ -11,7 +12,11 @@ const currentDate = new Date().toLocaleString('lt',{timezone:'America/Mexico_Cit
 export const Registrar = () => {
   const { register, handleSubmit, formState: { errors }, reset, getValues } = useForm({defaultValues:date});
   const { cargarAvailableRooms, reservarRoom, availableRooms:rooms  } = useReservaciones();
-  const { user_id, user_role } = useAuth();
+  const { user } = useAuth();
+  const { user_role, user_id } = user;
+
+  const [mensaje, setMensaje] = useState(false);
+  
 
   const onBuscarReservaciones = async (formData) => {
     const {begin_date, end_date} = formData;
@@ -32,6 +37,9 @@ export const Registrar = () => {
       return
     }
     cargarAvailableRooms(formData);
+    if ( rooms.length === 0 ) {
+      setMensaje(true);
+    }
   }
 
   const onHandleReservacion = async (room_id) => {
@@ -80,7 +88,7 @@ export const Registrar = () => {
       </form>
 
       {
-        rooms.length > 0 && (
+        rooms.length > 0 ? (
           <table className="table m-auto w-75">
             <thead>
               <tr>
@@ -116,6 +124,8 @@ export const Registrar = () => {
               }
             </tbody>
           </table>
+        ) : mensaje && (
+          <h3 className="text-center">No hay habitaciones disposibles para esa fecha :(</h3>
         )
       }
     </div>

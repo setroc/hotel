@@ -67,7 +67,6 @@ export const FormGenerico = ({tipo,modo, url}) => {
         delete body.nombre;
       }
       reset(body)
-
     } catch (error) {
       console.log(error)
     }
@@ -84,13 +83,16 @@ export const FormGenerico = ({tipo,modo, url}) => {
   }
 
   useEffect(() => {
-    if (modo) {
+    if (modo && tipo !== 2) {
+      return
+    } else if(modo && tipo===2){
+      getTypesRooms();
+      return
+    } else if (!modo && tipo===2) {
+      getTypesRooms();
+      getData(id);
       return
     }
-    if(tipo===2){
-      getTypesRooms();
-    }
-    getData(id);
   }, [modo])
   
 
@@ -191,7 +193,7 @@ export const FormGenerico = ({tipo,modo, url}) => {
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card-body w-100 p-4 text-center">
-          <h3 className="mb-5">{modo?`Registrar cuart`:`Actualizar cuarto`}</h3>
+          <h3 className="mb-5">{modo?`Registrar cuarto`:`Actualizar cuarto`}</h3>
           <div className="mb-2">
             <label className="form-label text-start w-100">
               Nombre

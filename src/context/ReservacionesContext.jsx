@@ -59,7 +59,7 @@ export const ReservacionesProvider = ({ children }) => {
     }
   }
 
-  const reservarRoom = async (begin_date, end_date, room_id, client_id) => {
+  const reservarRoom = async (begin_date, end_date, room_id, user_id) => {
     try {
       const resp = await fetch('http://localhost:4000/api/v1/reservation',{
         method:'POST',
@@ -72,14 +72,16 @@ export const ReservacionesProvider = ({ children }) => {
           begin_date,
           end_date,
           room_id,
-          client_id
+          user_id
         })
       })
-      console.log(resp);
       Swal.fire({
         title: 'Se ha realizado la reservación correctamente'
       })
       dispatch({type:'removerAvailableRooms',payload:room_id});
+      const body = await resp.json();
+      console.log(body)
+      return body;
     } catch (error) {
       console.log(error)
     }
@@ -121,7 +123,7 @@ const reservacionesReducer = (state, action) => {
     case 'removerAvailableRooms':
       return {
         ...state,
-        availableRooms: state.availableRooms.filter(room=>room.idHabitación !== action.payload)
+        availableRooms: state.availableRooms.filter(room=>room.idHabitacion !== action.payload)
       }
     default:
       return state;
